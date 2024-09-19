@@ -1,0 +1,28 @@
+.key-value-input {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.input-box {
+  flex: 1;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 8px;
+}
+
+.delete-button:hover {
+  color: darkred;
+}

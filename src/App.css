@@ -1,0 +1,36 @@
+.App {
+  font-size: 18px;
+  display: flex;
+  justify-content: space-around;
+  height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid #ecf0f4;
+  padding: 0 12px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.json-diff-viewer pre .inline-diff-remove {
+  text-decoration: none !important;
+}
+
+.main-layout {
+  width: calc(100% - 300px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-content {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}

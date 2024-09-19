@@ -1,0 +1,17 @@
+/* Navbar.css */
+
+.navbar {  
+  font-size: 26px;
+}
+
+.description {
+  font-size: 16px;
+}
+
+.nav-container {
+  display: flex;
+  height: 110px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
