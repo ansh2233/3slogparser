@@ -187,9 +187,15 @@ const Composer = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(mergeHeaders(defaultHeaders, requiredHeaders));
-    const response = await axios.post(updateUrl(url), requestBody, {
-      headers: mergeHeaders(requiredHeaders, defaultHeaders),
-    });
+    var response = null;
+    try{
+      response = await axios.post(updateUrl(url), requestBody, {
+        headers: mergeHeaders(requiredHeaders, defaultHeaders),
+      });      
+    } catch(error){
+      console.error("Error executing the search request: ", error);
+      return;
+    }
 
     setResponseBody(response.data);
     setResponseHeaders(response.headers);
