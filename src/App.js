@@ -70,6 +70,7 @@ function App() {
       traceparent: "00-0c8abcf55460db9bb899bfc074a3c2b5-2e105fcbe50c980c-00",
     },
     19: { "content-type": "application/json" },
+    20: { "DebugOptions": "Full" },
   };
 
   const [defaultHeaders, setDefaultHeaders] = useState(defaultHeadersDict);

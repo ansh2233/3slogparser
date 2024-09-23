@@ -85,6 +85,8 @@ const responseToNuowoCalls = (response) => {
   let numNuowoResponses = 0;
   const nuowoRequestsTemp = [];
   const nuowoResponsesTemp = [];
+  const nuowoRequestHeadersTemp = [];
+  const nuowoResponseHeadersTemp = [];
   const nuowoCodes = [];
 
   // Find nuowo Requests
@@ -94,7 +96,7 @@ const responseToNuowoCalls = (response) => {
       if (key.endsWith("HttpRequestBody.SearchStep")) {
         const value = item[key];
         numNuowoRequests += 1;
-        nuowoCodes.push(key.substring(12, key.indexOf(".")));
+        nuowoCodes.push(key.substring("HttpRequest_".length, key.indexOf(".HttpRequestBody.SearchStep")));
         nuowoRequestsTemp.push(decode(value));
       } else if (key.endsWith("HttpResponseBody.SearchStep")) {
         numNuowoResponses += 1;
@@ -110,9 +112,21 @@ const responseToNuowoCalls = (response) => {
       "HttpResponse_" + code + ".HttpResponseBody.SearchStep"
     );
     nuowoResponsesTemp.push(decode(response));
+
+    const requestHeaders = JSON.parse(findKey(
+      xap_logs,
+      "HttpRequest_" + code + ".HttpRequestHeader.SearchStep"
+    ));
+    nuowoRequestHeadersTemp.push(requestHeaders);
+    
+    const responseHeaders = findKey(
+      xap_logs,
+      "HttpResponse_" + code + ".HttpResponseHeader.SearchStep"
+    );
+    nuowoResponseHeadersTemp.push(responseHeaders);
   }
 
-  return { nuowoRequestsTemp, nuowoResponsesTemp };
+  return { nuowoRequestHeadersTemp, nuowoRequestsTemp, nuowoResponseHeadersTemp, nuowoResponsesTemp };
 };
 
 const mergeHeaders = (defaultHeaders, requiredHeaders) => {
@@ -189,9 +203,11 @@ const Composer = ({
     console.log(mergeHeaders(defaultHeaders, requiredHeaders));
     var response = null;
     try{
-      response = await axios.post(updateUrl(url), requestBody, {
-        headers: mergeHeaders(requiredHeaders, defaultHeaders),
-      });      
+      const final_url = updateUrl(url);
+      const final_headers = mergeHeaders(requiredHeaders, defaultHeaders);
+      response = await axios.post(final_url, requestBody, {
+        headers: final_headers,
+                                                          });      
     } catch(error){
       console.error("Error executing the search request: ", error);
       return;
@@ -201,7 +217,7 @@ const Composer = ({
     setResponseHeaders(response.headers);
     setActiveTab(TABS.THREE_S_CALL);
 
-    const { nuowoRequestsTemp, nuowoResponsesTemp } =
+    const { nuowoRequestHeadersTemp, nuowoRequestsTemp, nuowoResponseHeadersTemp, nuowoResponsesTemp } =
       responseToNuowoCalls(response);
     const { IQRequests, IQResponses } =
       nuowoResponsesToIQCalls(nuowoResponsesTemp);
